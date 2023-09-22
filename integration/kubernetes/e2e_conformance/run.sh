@@ -188,7 +188,7 @@ cleanup() {
 		fi
 	} || true
 
-	if [ "$RUNTIME" == "containerd-shim-kata-v2" ]; then
+	if [ "$RUNTIME" == "containerd-shim-kata-v2" ] || [ "$RUNTIME" == "runa" ]; then
 		delete_kata_webhook
 	fi
 
@@ -198,14 +198,15 @@ cleanup() {
 	bash -c "$(readlink -f ${SCRIPT_PATH}/../cleanup_env.sh)" || true
 }
 
-trap "{ cleanup; }" EXIT
+#trap "{ cleanup; }" EXIT
 
 main() {
-	if [ "$RUNTIME" == "containerd-shim-kata-v2" ]; then
+	if [ "$RUNTIME" == "containerd-shim-kata-v2" ] || [ "$RUNTIME" == "runa" ]; then
+		info "creating runtimeclass webhook"
 		create_kata_webhook
 	fi
 
-	get_sonobuoy
+	#get_sonobuoy
 	run_sonobuoy
 }
 
